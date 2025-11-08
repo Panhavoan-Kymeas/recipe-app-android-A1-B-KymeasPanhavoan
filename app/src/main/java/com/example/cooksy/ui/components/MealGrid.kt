@@ -14,7 +14,9 @@ import androidx.compose.foundation.lazy.grid.items
 @Composable
 fun MealGrid(
     meals: List<Meal>,
-    onClick: (Meal) -> Unit
+    favorites: List<Meal>,
+    onClick: (Meal) -> Unit,
+    onToggleFavorite: (Meal) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(160.dp),
@@ -25,7 +27,14 @@ fun MealGrid(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(meals) { meal ->
-            MealCard(meal = meal, modifier = Modifier.padding(8.dp)) { onClick(meal) }
+            val isFav = favorites.any { it.id == meal.id }
+            MealCard(
+                meal = meal,
+                modifier = Modifier.padding(8.dp),
+                onClick = { onClick(meal) },
+                isFavorite = isFav,
+                onToggleFavorite = { onToggleFavorite(meal) }
+            )
         }
     }
 }

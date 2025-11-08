@@ -11,15 +11,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.cooksy.data.model.Meal
 import com.example.cooksy.ui.components.CategoryChips
 import com.example.cooksy.ui.components.MealGrid
+import com.example.cooksy.ui.favorite.FavoriteViewModel
 
 @Composable
 fun ExploreScreen(
     viewModel: ExploreViewModel = hiltViewModel(),
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onMealClick: (Meal) -> Unit
 ) {
     val categories by viewModel.categories.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val meals by viewModel.meals.collectAsState()
+    val favorites by favoriteViewModel.favorites.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
@@ -49,7 +52,12 @@ fun ExploreScreen(
                 Text(text = "Error: $errorMessage")
             }
 
-            else -> MealGrid(meals = meals, onClick = onMealClick)
+            else -> MealGrid(
+                meals = meals,
+                favorites = favorites,
+                onClick = onMealClick,
+                onToggleFavorite = { favoriteViewModel.toggleFavorite(it) }
+            )
         }
     }
 }

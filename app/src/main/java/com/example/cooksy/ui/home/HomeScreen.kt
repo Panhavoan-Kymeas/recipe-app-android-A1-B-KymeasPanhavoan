@@ -17,10 +17,12 @@ import com.example.cooksy.ui.components.AreaSection
 import com.example.cooksy.ui.components.CategorySection
 import com.example.cooksy.ui.components.ChefSuggestionSection
 import com.example.cooksy.ui.components.PopularMealsSection
+import com.example.cooksy.ui.favorite.FavoriteViewModel
 
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onMealClick: (Meal) -> Unit,
     onCategoryClick: (Category) -> Unit,
     onAreaClick: (String) -> Unit
@@ -29,6 +31,7 @@ fun HomeScreen(
     val randomMeal by homeViewModel.randomMeal.collectAsState()
     val categories by homeViewModel.categories.collectAsState()
     val areas by homeViewModel.areas.collectAsState()
+    val favorites by favoriteViewModel.favorites.collectAsState()
     val isLoading by homeViewModel.isLoading.collectAsState()
     val error by homeViewModel.errorMessage.collectAsState()
 
@@ -40,7 +43,14 @@ fun HomeScreen(
         } else {
             LazyColumn {
                 item { ChefSuggestionSection(randomMeal, onClick = onMealClick) }
-                item { PopularMealsSection(popularMeals, onClick = onMealClick) }
+                item {
+                    PopularMealsSection(
+                        meals = popularMeals,
+                        favorites = favorites,
+                        onClick = onMealClick,
+                        onToggleFavorite = { favoriteViewModel.toggleFavorite(it) }
+                    )
+                }
                 item { CategorySection(categories, onClick = onCategoryClick) }
                 item { AreaSection(areas, onClick = onAreaClick) }
             }

@@ -14,14 +14,22 @@ import androidx.compose.foundation.lazy.items
 @Composable
 fun PopularMealsSection(
     meals: List<Meal>,
-    onClick: (Meal) -> Unit
-    ) {
+    favorites: List<Meal>,
+    onClick: (Meal) -> Unit,
+    onToggleFavorite: (Meal) -> Unit
+) {
     Column(modifier = Modifier.padding(start = 16.dp, top = 8.dp)) {
         Text("Popular Meals", style = MaterialTheme.typography.titleMedium)
         LazyRow {
             items(meals) { meal ->
+                val isFav = favorites.any { it.id == meal.id }
                 MealCard(
-                    meal = meal, modifier = Modifier.padding(8.dp)) { onClick(meal) }
+                    meal = meal,
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { onClick(meal) },
+                    isFavorite = isFav,
+                    onToggleFavorite = { onToggleFavorite(meal) }
+                )
             }
         }
     }
