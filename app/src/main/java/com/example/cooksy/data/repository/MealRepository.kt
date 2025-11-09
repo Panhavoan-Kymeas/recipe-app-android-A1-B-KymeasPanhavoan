@@ -123,4 +123,25 @@ class MealRepository @Inject constructor(
     suspend fun isFavorite(id: String): Boolean {
         return favoriteDao.getFavoriteMealById(id) != null
     }
+
+    suspend fun getFavoriteMealById(id: String): Meal? {
+        val favMeal = favoriteDao.getFavoriteMealById(id)
+        return favMeal?.let { fav ->
+            Meal(
+                id = fav.meal.id,
+                meal = fav.meal.meal,
+                drinkAlternate = fav.meal.drinkAlternate,
+                category = fav.meal.category,
+                categoryId = fav.meal.categoryId,
+                area = fav.meal.area,
+                instructions = fav.meal.instructions,
+                mealThumb = fav.meal.mealThumb,
+                tags = fav.meal.tags,
+                youtube = fav.meal.youtube,
+                source = fav.meal.source,
+                ingredients = fav.ingredients.map { Ingredient(it.ingredient, it.measure) }
+            )
+        }
+    }
+
 }

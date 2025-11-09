@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.cooksy.ui.explore.ExploreScreen
+import com.example.cooksy.ui.favorite.FavoriteScreen
 import com.example.cooksy.ui.home.HomeScreen
+import com.example.cooksy.ui.detail.MealDetailScreen
 import com.example.cooksy.ui.theme.CooksyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,11 +28,19 @@ class MainActivity : ComponentActivity() {
 //                        println("Clicked area: $area")
 //                    }
 //                )
-                ExploreScreen(
-                    onMealClick = { meal ->
-                        println("Clicked meal: ${meal.meal}")
-                    }
-                )
+//                ExploreScreen(
+//                    onMealClick = { meal ->
+//                        println("Clicked meal: ${meal.meal}")
+//                    }
+//                )
+//                FavoriteScreen(
+//                    onClick = {
+//                        meal -> println("Click meal: ${meal.meal}")
+//                    }
+//                )
+//                MealDetailScreen(
+//                    "52883"
+//                )
             }
         }
     }
