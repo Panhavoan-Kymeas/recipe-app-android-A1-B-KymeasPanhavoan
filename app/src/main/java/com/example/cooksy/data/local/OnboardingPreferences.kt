@@ -12,7 +12,7 @@ val Context.dataStore by preferencesDataStore(name = "onboarding_prefs")
 class OnboardingPreferences(private val context: Context) {
 
     companion object {
-        private val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
     }
 
     val onboardingCompleted: Flow<Boolean> = context.dataStore.data.map { prefs ->
