@@ -3,6 +3,7 @@ package com.example.cooksy
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.cooksy.navigation.AppNavHost
 import com.example.cooksy.ui.explore.ExploreScreen
 import com.example.cooksy.ui.favorite.FavoriteScreen
 import com.example.cooksy.ui.home.HomeScreen
@@ -16,7 +17,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CooksyTheme {
-                // Pass a dummy lambda to HomeScreen
 //                HomeScreen(
 //                    onMealClick = { meal ->
 //                        println("Clicked meal: ${meal.meal}")
@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
 //                MealDetailScreen(
 //                    "52883"
 //                )
+                AppNavHost()
             }
         }
     }

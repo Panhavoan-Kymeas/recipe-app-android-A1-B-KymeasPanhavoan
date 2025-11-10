@@ -4,6 +4,7 @@ import com.example.cooksy.data.model.Category
 import com.example.cooksy.data.model.Meal
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MealApi {
@@ -22,10 +23,10 @@ interface MealApi {
     /**
      * Get a single meal by its ID.
      */
-    @GET("meals")
+    @GET("meals/{id}")
     suspend fun getMealById(
         @Header("X-DB-NAME") dbName: String,
-        @Query("id") id: String
+        @Path("id") id: String
     ): Meal
 
     /**
