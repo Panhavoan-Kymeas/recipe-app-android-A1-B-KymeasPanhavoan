@@ -37,9 +37,7 @@ fun ExploreScreen(
             categories = categories,
             selectedCategory = selectedCategory,
             onSelectCategory = { category ->
-                viewModel.selectCategory(
-                    if (selectedCategory == category.category) null else category.category
-                )
+                viewModel.selectCategory(category.category)
             }
         )
 

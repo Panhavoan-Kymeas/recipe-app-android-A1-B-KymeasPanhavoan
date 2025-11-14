@@ -65,7 +65,7 @@ class ExploreViewModel @Inject constructor(
     }
 
     fun selectCategory(categoryName: String?) {
-        _selectedCategory.value = categoryName
-        loadMeals(categoryName)
+        _selectedCategory.value = if (_selectedCategory.value == categoryName) null else categoryName
+        loadMeals(_selectedCategory.value)
     }
 }

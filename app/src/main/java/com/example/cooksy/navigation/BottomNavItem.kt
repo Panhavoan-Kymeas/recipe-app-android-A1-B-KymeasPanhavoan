@@ -1,15 +1,19 @@
 package com.example.cooksy.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class BottomNavItem(
-    val route: String,
-    val icon: ImageVector,
-    val label: String
-) {
-    object Home : BottomNavItem("home", Icons.Filled.Home, "Home")
-    object Explore : BottomNavItem("explore", Icons.Filled.Search, "Explore")
-    object Favorites : BottomNavItem("favorites", Icons.Filled.Favorite, "Favorites")
+sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
+    object Home : BottomNavItem("home", "Home", Icons.Default.Home)
+    object Explore : BottomNavItem("explore", "Explore", Icons.Default.Search)
+    object Favorite : BottomNavItem("favorite", "Favorite", Icons.Default.Favorite)
 }
+
+val bottomNavItems = listOf(
+    BottomNavItem.Home,
+    BottomNavItem.Explore,
+    BottomNavItem.Favorite
+)
