@@ -11,11 +11,14 @@ import com.example.cooksy.data.local.OnboardingPreferences
 import com.example.cooksy.navigation.AppNavHost
 import com.example.cooksy.ui.components.BottomNavBar
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.cooksy.navigation.Screen
+import com.example.cooksy.ui.explore.ExploreViewModel
 
 @Composable
 fun MainScreen(onboardingPreferences: OnboardingPreferences) {
     val navController = rememberNavController()
+    val exploreViewModel: ExploreViewModel = hiltViewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -29,7 +32,8 @@ fun MainScreen(onboardingPreferences: OnboardingPreferences) {
         Box(modifier = Modifier.padding(innerPadding)) {
             AppNavHost(
                 navController = navController,
-                onboardingPreferences = onboardingPreferences
+                onboardingPreferences = onboardingPreferences,
+                exploreViewModel = exploreViewModel // pass shared VM down
             )
         }
     }

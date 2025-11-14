@@ -12,18 +12,20 @@ import androidx.navigation.navArgument
 import com.example.cooksy.data.local.OnboardingPreferences
 import com.example.cooksy.ui.detail.MealDetailScreen
 import com.example.cooksy.ui.explore.ExploreScreen
+import com.example.cooksy.ui.explore.ExploreViewModel
 import com.example.cooksy.ui.favorite.FavoriteScreen
 import com.example.cooksy.ui.home.HomeScreen
-import com.example.cooksy.ui.onboarding.OnboardingScreen
+import com.example.cooksy.ui.onboarding.OnBoardingScreen
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    onboardingPreferences: OnboardingPreferences
+    onboardingPreferences: OnboardingPreferences,
+    exploreViewModel: ExploreViewModel
 ) {
     val onboardingCompleted by onboardingPreferences.onboardingCompleted.collectAsState(initial = false)
-    val startDestination = if (onboardingCompleted) Screen.Home.route else Screen.OnBoarding.route
+    val startDestination = if (onboardingCompleted) "home" else "onboarding"
 
     NavHost(navController = navController, startDestination = startDestination) {
 
@@ -31,11 +33,11 @@ fun AppNavHost(
         composable(Screen.OnBoarding.route) {
             val coroutineScope = rememberCoroutineScope()
 
-            OnboardingScreen(onFinish = {
+            OnBoardingScreen(onFinish = {
                 coroutineScope.launch {
                     onboardingPreferences.setOnboardingCompleted(true)
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.OnBoarding.route) { inclusive = true }
+                    navController.navigate("home") {
+                        popUpTo("onboarding") { inclusive = true }
                     }
                 }
             })
@@ -44,10 +46,17 @@ fun AppNavHost(
         // Home
         composable(Screen.Home.route) {
             HomeScreen(
-                onMealClick = { meal ->
-                    navController.navigate(Screen.MealDetail.createRoute(meal.id))
+                onMealClick = { meal -> navController.navigate(Screen.MealDetail.createRoute(meal.id)) },
+                onCategoryClick = { category ->
+                    // ✅ Select category in ExploreViewModel
+                    exploreViewModel.selectCategory(category.category)
+                    // ✅ Switch to Explore tab
+                    navController.navigate(Screen.Explore.route) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(Screen.Home.route) { saveState = true }
+                    }
                 },
-                onCategoryClick = { /* ignore for now */ },
                 onAreaClick = { /* ignore for now */ }
             )
         }
@@ -55,6 +64,7 @@ fun AppNavHost(
         // Explore
         composable(Screen.Explore.route) {
             ExploreScreen(
+                viewModel = exploreViewModel,
                 onMealClick = { meal ->
                     navController.navigate(Screen.MealDetail.createRoute(meal.id))
                 }
@@ -64,11 +74,9 @@ fun AppNavHost(
         // Favorite
         composable(Screen.Favorite.route) {
             FavoriteScreen(onClick = { meal ->
-                navController.navigate(Screen.MealDetail.createRoute(meal.id))
-            })
+                navController.navigate(Screen.MealDetail.createRoute(meal.id)) })
         }
 
-        // Meal Detail
         composable(
             route = Screen.MealDetail.route,
             arguments = listOf(navArgument("mealId") { type = NavType.StringType })

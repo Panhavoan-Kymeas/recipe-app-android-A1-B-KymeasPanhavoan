@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 @Composable
-fun OnboardingScreen(onFinish: () -> Unit) {
+fun OnBoardingScreen(onFinish: () -> Unit) {
     var pageIndex by remember { mutableIntStateOf(0) }
     val currentPage = onBoardingPages[pageIndex]
 

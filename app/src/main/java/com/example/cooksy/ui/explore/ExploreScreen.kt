@@ -15,7 +15,7 @@ import com.example.cooksy.ui.favorite.FavoriteViewModel
 
 @Composable
 fun ExploreScreen(
-    viewModel: ExploreViewModel = hiltViewModel(),
+    viewModel: ExploreViewModel,
     favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onMealClick: (Meal) -> Unit
 ) {

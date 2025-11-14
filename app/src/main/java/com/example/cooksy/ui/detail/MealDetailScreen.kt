@@ -16,6 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun MealDetailScreen(
@@ -24,6 +28,7 @@ fun MealDetailScreen(
 ) {
     val meal by viewModel.meal.collectAsState()
     val isFavorite by viewModel.isFavorite.collectAsState()
+    val context = LocalContext.current
 
     // Load the meal only once
     LaunchedEffect(mealId) {
@@ -44,6 +49,7 @@ fun MealDetailScreen(
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         item {
+            // Meal image
             AsyncImage(
                 model = meal!!.mealThumb,
                 contentDescription = meal!!.meal,
@@ -54,6 +60,8 @@ fun MealDetailScreen(
                     .clip(MaterialTheme.shapes.medium)
             )
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Meal title + favorite
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -61,8 +69,8 @@ fun MealDetailScreen(
             ) {
                 Text(
                     text = meal!!.meal,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = { viewModel.toggleFavorite() }) {
                     Icon(
@@ -72,52 +80,70 @@ fun MealDetailScreen(
                     )
                 }
             }
+
+            // Category & area
             Text(
                 text = "${meal!!.category} • ${meal!!.area}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Ingredients section
             Text(
                 text = "Ingredients",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
+        // List of ingredients
         items(meal!!.ingredients) { ingredient ->
             Text(
                 text = "• ${ingredient.ingredient} — ${ingredient.measure}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(vertical = 2.dp)
             )
         }
 
         item {
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Instructions
             Text(
                 text = "Instructions",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = meal!!.instructions,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                lineHeight = 20.sp
             )
-        }
 
-        item {
             Spacer(modifier = Modifier.height(24.dp))
-            meal!!.youtube?.let {
-                TextButton(onClick = { /* open YouTube */ }) {
-                    Text("Watch on YouTube ▶")
+
+            // Links
+            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                meal!!.youtube?.let { youtubeLink ->
+                    TextButton(onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink))
+                        context.startActivity(intent)
+                    }) {
+                        Text("Watch on YouTube ▶", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium))
+                    }
+                }
+                meal!!.source?.let { sourceLink ->
+                    TextButton(onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sourceLink))
+                        context.startActivity(intent)
+                    }) {
+                        Text("View Recipe Source 🌐", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium))
+                    }
                 }
             }
-            meal!!.source?.let {
-                TextButton(onClick = { /* open source URL */ }) {
-                    Text("View Recipe Source 🌐")
-                }
-            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
