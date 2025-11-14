@@ -11,6 +11,7 @@ import com.example.cooksy.data.local.OnboardingPreferences
 import com.example.cooksy.navigation.AppNavHost
 import com.example.cooksy.ui.components.BottomNavBar
 import androidx.compose.ui.Modifier
+import com.example.cooksy.navigation.Screen
 
 @Composable
 fun MainScreen(onboardingPreferences: OnboardingPreferences) {
@@ -20,7 +21,7 @@ fun MainScreen(onboardingPreferences: OnboardingPreferences) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != "onboarding") {
+            if (currentRoute != Screen.OnBoarding.route) {
                 BottomNavBar(navController = navController)
             }
         }

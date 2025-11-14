@@ -23,7 +23,7 @@ fun AppNavHost(
     onboardingPreferences: OnboardingPreferences
 ) {
     val onboardingCompleted by onboardingPreferences.onboardingCompleted.collectAsState(initial = false)
-    val startDestination = if (onboardingCompleted) "home" else "onboarding"
+    val startDestination = if (onboardingCompleted) Screen.Home.route else Screen.OnBoarding.route
 
     NavHost(navController = navController, startDestination = startDestination) {
 
@@ -34,8 +34,8 @@ fun AppNavHost(
             OnboardingScreen(onFinish = {
                 coroutineScope.launch {
                     onboardingPreferences.setOnboardingCompleted(true)
-                    navController.navigate("home") {
-                        popUpTo("onboarding") { inclusive = true }
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.OnBoarding.route) { inclusive = true }
                     }
                 }
             })
@@ -45,7 +45,8 @@ fun AppNavHost(
         composable(Screen.Home.route) {
             HomeScreen(
                 onMealClick = { meal ->
-                    navController.navigate(Screen.MealDetail.createRoute(meal.id)) },
+                    navController.navigate(Screen.MealDetail.createRoute(meal.id))
+                },
                 onCategoryClick = { /* ignore for now */ },
                 onAreaClick = { /* ignore for now */ }
             )
@@ -55,16 +56,19 @@ fun AppNavHost(
         composable(Screen.Explore.route) {
             ExploreScreen(
                 onMealClick = { meal ->
-                    navController.navigate(Screen.MealDetail.createRoute(meal.id)) }
+                    navController.navigate(Screen.MealDetail.createRoute(meal.id))
+                }
             )
         }
 
         // Favorite
         composable(Screen.Favorite.route) {
             FavoriteScreen(onClick = { meal ->
-                navController.navigate(Screen.MealDetail.createRoute(meal.id)) })
+                navController.navigate(Screen.MealDetail.createRoute(meal.id))
+            })
         }
 
+        // Meal Detail
         composable(
             route = Screen.MealDetail.route,
             arguments = listOf(navArgument("mealId") { type = NavType.StringType })
