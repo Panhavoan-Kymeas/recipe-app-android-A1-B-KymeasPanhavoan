@@ -24,7 +24,7 @@ fun MainScreen(onboardingPreferences: OnboardingPreferences) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screen.OnBoarding.route) {
+            if (currentRoute != Screen.OnBoarding.route && currentRoute != Screen.Splash.route) {
                 BottomNavBar(navController = navController)
             }
         }

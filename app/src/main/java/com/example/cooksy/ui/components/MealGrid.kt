@@ -22,15 +22,15 @@ fun MealGrid(
         columns = GridCells.Adaptive(160.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(meals) { meal ->
             val isFav = favorites.any { it.id == meal.id }
             MealCard(
                 meal = meal,
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(4.dp),
                 onClick = { onClick(meal) },
                 isFavorite = isFav,
                 onToggleFavorite = { onToggleFavorite(meal) }

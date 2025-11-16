@@ -20,6 +20,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 
 @Composable
 fun MealDetailScreen(
@@ -127,7 +128,7 @@ fun MealDetailScreen(
             Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
                 meal!!.youtube?.let { youtubeLink ->
                     TextButton(onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeLink))
+                        val intent = Intent(Intent.ACTION_VIEW, youtubeLink.toUri())
                         context.startActivity(intent)
                     }) {
                         Text("Watch on YouTube ▶", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium))
@@ -135,7 +136,7 @@ fun MealDetailScreen(
                 }
                 meal!!.source?.let { sourceLink ->
                     TextButton(onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(sourceLink))
+                        val intent = Intent(Intent.ACTION_VIEW, sourceLink.toUri())
                         context.startActivity(intent)
                     }) {
                         Text("View Recipe Source 🌐", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium))

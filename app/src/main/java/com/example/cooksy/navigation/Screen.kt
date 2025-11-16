@@ -1,6 +1,7 @@
 package com.example.cooksy.navigation
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object OnBoarding : Screen("onboarding")
     object Home : Screen("home")
     object Explore : Screen("explore")

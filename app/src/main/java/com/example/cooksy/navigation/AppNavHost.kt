@@ -9,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.cooksy.SplashScreen
 import com.example.cooksy.data.local.OnboardingPreferences
 import com.example.cooksy.ui.detail.MealDetailScreen
 import com.example.cooksy.ui.explore.ExploreScreen
@@ -25,9 +26,25 @@ fun AppNavHost(
     exploreViewModel: ExploreViewModel
 ) {
     val onboardingCompleted by onboardingPreferences.onboardingCompleted.collectAsState(initial = false)
-    val startDestination = if (onboardingCompleted) "home" else "onboarding"
+    val startDestination = Screen.Splash.route
 
     NavHost(navController = navController, startDestination = startDestination) {
+
+        // Splash
+        composable(Screen.Splash.route) {
+            SplashScreen(onTimeout = {
+                if (onboardingCompleted) {
+                    navController.navigate("home") {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                } else {
+                    navController.navigate("onboarding") {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                }
+            })
+        }
+
 
         // Onboarding
         composable(Screen.OnBoarding.route) {
@@ -46,18 +63,29 @@ fun AppNavHost(
         // Home
         composable(Screen.Home.route) {
             HomeScreen(
-                onMealClick = { meal -> navController.navigate(Screen.MealDetail.createRoute(meal.id)) },
+                onMealClick = { meal ->
+                    navController.navigate(Screen.MealDetail.createRoute(meal.id))
+                },
                 onCategoryClick = { category ->
-                    // ✅ Select category in ExploreViewModel
+                    // Select category in ExploreViewModel
                     exploreViewModel.selectCategory(category.category)
-                    // ✅ Switch to Explore tab
+                    // Navigate to Explore tab
                     navController.navigate(Screen.Explore.route) {
                         launchSingleTop = true
                         restoreState = true
                         popUpTo(Screen.Home.route) { saveState = true }
                     }
                 },
-                onAreaClick = { /* ignore for now */ }
+                onAreaClick = { area ->
+                    // Select area in ExploreViewModel
+                    exploreViewModel.selectArea(area)
+                    // Navigate to Explore tab
+                    navController.navigate(Screen.Explore.route) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(Screen.Home.route) { saveState = true }
+                    }
+                }
             )
         }
 

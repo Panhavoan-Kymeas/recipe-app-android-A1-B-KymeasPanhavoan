@@ -19,6 +19,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.cooksy.data.model.Meal
 import com.example.cooksy.ui.components.FavoriteMealCard
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun FavoriteScreen(
@@ -31,7 +32,7 @@ fun FavoriteScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Your Favorites",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(16.dp)
         )
 
